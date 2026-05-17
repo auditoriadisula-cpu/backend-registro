@@ -7,130 +7,95 @@ app.use(cors());
 app.use(express.json());
 
 /* =========================
-   DATOS TEMPORALES
+DATOS PRUEBA
 ========================= */
 
-let productos = [
-
-  ["1001", "LECHE ENTERA"],
-  ["1002", "JUGO NARANJA"],
-  ["1003", "CREMA"],
-  ["1004", "QUESO"],
-  ["1005", "MANTEQUILLA"]
-
+const productos = [
+["1001", "LECHE ENTERA"],
+["1002", "JUGO NARANJA"],
+["1003", "CREMA"],
+["1004", "QUESO"],
+["1005", "MANTEQUILLA"]
 ];
 
-let registrosFurgon = [];
-let registrosProductos = [];
-
 /* =========================
-   API
+TEST
 ========================= */
 
 app.get("/", (req, res) => {
-
-  res.send("API ACTIVA");
-
+res.send("API funcionando");
 });
 
 /* =========================
-   API POST
+API
 ========================= */
 
-app.post("/api", async (req, res) => {
+app.post("/api", (req, res) => {
 
-  try {
+try {
 
-    const data = req.body;
+```
+const data = req.body;
 
-    /* =========================
-       OBTENER PRODUCTOS
-    ========================= */
+console.log(data);
 
-    if (data.accion === "obtenerProductos") {
+if (data.accion === "obtenerProductos") {
 
-      return res.json({
-        ok: true,
-        data: productos
-      });
+  return res.json({
+    ok: true,
+    data: productos
+  });
 
-    }
+}
 
-    /* =========================
-       GUARDAR FURGON
-    ========================= */
+if (data.accion === "guardarFurgon") {
 
-    if (data.accion === "guardarFurgon") {
+  return res.json({
+    ok: true,
+    mensaje: "Furgón guardado"
+  });
 
-      registrosFurgon.push({
-        fecha: new Date(),
-        ...data
-      });
+}
 
-      return res.json({
-        ok: true,
-        mensaje: "Furgón guardado"
-      });
+if (data.accion === "guardarProducto") {
 
-    }
+  return res.json({
+    ok: true,
+    mensaje: "Producto guardado"
+  });
 
-    /* =========================
-       GUARDAR PRODUCTO
-    ========================= */
+}
 
-    if (data.accion === "guardarProducto") {
+if (data.accion === "obtenerReporte") {
 
-      registrosProductos.push({
-        fecha: new Date(),
-        ...data
-      });
+  return res.json({
+    ok: true,
+    data: []
+  });
 
-      return res.json({
-        ok: true,
-        mensaje: "Producto guardado"
-      });
+}
 
-    }
+return res.json({
+  ok: false,
+  error: "Acción no válida"
+});
+```
 
-    /* =========================
-       REPORTE
-    ========================= */
+} catch (err) {
 
-    if (data.accion === "obtenerReporte") {
+```
+return res.json({
+  ok: false,
+  error: err.message
+});
+```
 
-      const factura = String(data.factura).trim();
-
-      const filtrados = registrosProductos.filter(r =>
-        String(r.factura).trim() === factura
-      );
-
-      return res.json({
-        ok: true,
-        data: filtrados
-      });
-
-    }
-
-    return res.json({
-      ok: false,
-      error: "Acción no válida"
-    });
-
-  } catch (err) {
-
-    return res.json({
-      ok: false,
-      error: err.message
-    });
-
-  }
+}
 
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-
-  console.log("Servidor iniciado");
-
+console.log("Servidor iniciado");
 });
