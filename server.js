@@ -6,96 +6,62 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* =========================
-DATOS PRUEBA
-========================= */
-
-const productos = [
-  ["1001", "LECHE ENTERA"],
-  ["1002", "JUGO NARANJA"],
-  ["1003", "CREMA"],
-  ["1004", "QUESO"],
-  ["1005", "MANTEQUILLA"]
-];
+const APPS_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbz0Y9Y47MsqUFCg_YrC_8pgo-ED7WRxA7oC4aBK756j7wT7cbTS6TE3Rp0FovGwfaC4bA/exec";
 
 /* =========================
 TEST
 ========================= */
 
 app.get("/", (req, res) => {
+
   res.send("API funcionando");
+
 });
 
 /* =========================
 API
 ========================= */
 
-app.post("/api", (req, res) => {
+app.post("/api", async (req, res) => {
 
   try {
 
-    const data = req.body;
+    const response = await fetch(
+      APPS_SCRIPT_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+          "application/json"
+        },
+        body: JSON.stringify(req.body)
+      }
+    );
 
-    console.log(data);
+    const data =
+    await response.json();
 
-    if (data.accion === "obtenerProductos") {
+    res.json(data);
 
-      return res.json({
-        ok: true,
-        data: productos
-      });
+  } catch(err) {
 
-    }
-
-    if (data.accion === "guardarFurgon") {
-
-      return res.json({
-        ok: true,
-        mensaje: "Furgón guardado"
-      });
-
-    }
-
-    if (data.accion === "guardarProducto") {
-
-      return res.json({
-        ok: true,
-        mensaje: "Producto guardado"
-      });
-
-    }
-
-    if (data.accion === "obtenerReporte") {
-
-      return res.json({
-        ok: true,
-        data: []
-      });
-
-    }
-
-    return res.json({
-      ok: false,
-      error: "Acción no válida"
-    });
-
-  } catch (err) {
-
-    return res.json({
-      ok: false,
-      error: err.message
+    res.json({
+      ok:false,
+      error:err.message
     });
 
   }
 
 });
 
-/* =========================
-SERVIDOR
-========================= */
-
-const PORT = process.env.PORT || 3000;
+const PORT =
+process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Servidor iniciado");
+
+  console.log(
+    "Servidor iniciado"
+  );
+
 });
