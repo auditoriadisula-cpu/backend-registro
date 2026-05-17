@@ -11,11 +11,11 @@ DATOS PRUEBA
 ========================= */
 
 const productos = [
-["1001", "LECHE ENTERA"],
-["1002", "JUGO NARANJA"],
-["1003", "CREMA"],
-["1004", "QUESO"],
-["1005", "MANTEQUILLA"]
+  ["1001", "LECHE ENTERA"],
+  ["1002", "JUGO NARANJA"],
+  ["1003", "CREMA"],
+  ["1004", "QUESO"],
+  ["1005", "MANTEQUILLA"]
 ];
 
 /* =========================
@@ -23,7 +23,7 @@ TEST
 ========================= */
 
 app.get("/", (req, res) => {
-res.send("API funcionando");
+  res.send("API funcionando");
 });
 
 /* =========================
@@ -32,70 +32,70 @@ API
 
 app.post("/api", (req, res) => {
 
-try {
+  try {
 
-```
-const data = req.body;
+    const data = req.body;
 
-console.log(data);
+    console.log(data);
 
-if (data.accion === "obtenerProductos") {
+    if (data.accion === "obtenerProductos") {
 
-  return res.json({
-    ok: true,
-    data: productos
-  });
+      return res.json({
+        ok: true,
+        data: productos
+      });
 
-}
+    }
 
-if (data.accion === "guardarFurgon") {
+    if (data.accion === "guardarFurgon") {
 
-  return res.json({
-    ok: true,
-    mensaje: "Furgón guardado"
-  });
+      return res.json({
+        ok: true,
+        mensaje: "Furgón guardado"
+      });
 
-}
+    }
 
-if (data.accion === "guardarProducto") {
+    if (data.accion === "guardarProducto") {
 
-  return res.json({
-    ok: true,
-    mensaje: "Producto guardado"
-  });
+      return res.json({
+        ok: true,
+        mensaje: "Producto guardado"
+      });
 
-}
+    }
 
-if (data.accion === "obtenerReporte") {
+    if (data.accion === "obtenerReporte") {
 
-  return res.json({
-    ok: true,
-    data: []
-  });
+      return res.json({
+        ok: true,
+        data: []
+      });
 
-}
+    }
 
-return res.json({
-  ok: false,
-  error: "Acción no válida"
-});
-```
+    return res.json({
+      ok: false,
+      error: "Acción no válida"
+    });
 
-} catch (err) {
+  } catch (err) {
 
-```
-return res.json({
-  ok: false,
-  error: err.message
-});
-```
+    return res.json({
+      ok: false,
+      error: err.message
+    });
 
-}
+  }
 
 });
+
+/* =========================
+SERVIDOR
+========================= */
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-console.log("Servidor iniciado");
+  console.log("Servidor iniciado");
 });
