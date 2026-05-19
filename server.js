@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyhA_XTNKq3ckd_gcbGywLnLN3s8C0Okl3O11eXEzQHKCj_v2ASAaDMnV1VhCobF25Bsg/exec";
+"https://script.google.com/macros/s/AKfycbwv83r-QqzmZ8YhFsr5jYbEtkLb7BQEBevYioZ35TlC8R59Fk8jzaevaj_7pPOClwMHNw/exec";
 
 /* =========================
 TEST
