@@ -1,26 +1,30 @@
 const express = require("express");
-const cors = require("cors");
+const cors    = require("cors");
 
 const app = express();
 
-app.use(cors());
+// CORS explícito — acepta cualquier origen (necesario para Android/Capacitor)
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwv83r-QqzmZ8YhFsr5jYbEtkLb7BQEBevYioZ35TlC8R59Fk8jzaevaj_7pPOClwMHNw/exec";
 
 /* =========================
-TEST
+   TEST
 ========================= */
 
 app.get("/", (req, res) => {
-
   res.send("API funcionando");
-
 });
 
 /* =========================
-API
+   PROXY → AppScript
 ========================= */
 
 app.post("/api", async (req, res) => {
@@ -30,38 +34,36 @@ app.post("/api", async (req, res) => {
     const response = await fetch(
       APPS_SCRIPT_URL,
       {
-        method: "POST",
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-        body: JSON.stringify(req.body)
+        method:   "POST",
+        redirect: "follow",          // ← AppScript responde con 302, hay que seguirlo
+        headers:  { "Content-Type": "application/json" },
+        body:     JSON.stringify(req.body)
       }
     );
 
-    const data =
-    await response.json();
+    const data = await response.json();
 
     res.json(data);
 
   } catch(err) {
 
     res.json({
-      ok:false,
-      error:err.message
+      ok:    false,
+      error: err.message
     });
 
   }
 
 });
 
-const PORT =
-process.env.PORT || 3000;
+/* =========================
+   OPTIONS (preflight CORS)
+========================= */
+
+app.options("/api", cors());
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-
-  console.log(
-    "Servidor iniciado"
-  );
-
+  console.log("Servidor iniciado en puerto " + PORT);
 });
